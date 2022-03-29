@@ -37,6 +37,11 @@ func MakeContainer(ctx context.Context, rt *libpod.Runtime, s *specgen.SpecGener
 		}
 	}
 
+	// remove capabilities from the spec if the pod is privileged
+	if len(s.CapAdd) > 0 && s.Privileged {
+		s.CapAdd = nil
+	}
+
 	// Set defaults for unset namespaces
 	if s.PidNS.IsDefault() {
 		defaultNS, err := GetDefaultNamespaceMode("pid", rtc, pod)
