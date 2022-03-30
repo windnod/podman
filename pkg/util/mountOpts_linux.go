@@ -11,8 +11,8 @@ func getDefaultMountOptions(path string) (defaultMountOptions, error) {
 	if path == "" {
 		return opts, nil
 	}
-	_, err := isFileExist(path)
-	if err != nil {
+	exist, err := isFileExist(path)
+	if !exist && err == nil {
 		if e := os.MkdirAll(path, 0755); e != nil {
 			return opts, &os.PathError{Op: "statfs", Path: path, Err: e}
 		}
@@ -33,6 +33,9 @@ func isFileExist(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
 		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
 	}
 
 	return false, err
