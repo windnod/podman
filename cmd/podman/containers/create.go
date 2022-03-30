@@ -202,9 +202,6 @@ func CreateInit(c *cobra.Command, vals entities.ContainerCreateOptions, isInfra 
 		if c.Flag("cpu-quota").Changed && c.Flag("cpus").Changed {
 			return vals, errors.Errorf("--cpu-quota and --cpus cannot be set together")
 		}
-		if c.Flag("cap-add").Changed && c.Flag("privileged").Changed {
-			vals.CapAdd = []string{}
-		}
 		vals.IPC = c.Flag("ipc").Value.String()
 		vals.UTS = c.Flag("uts").Value.String()
 		vals.PID = c.Flag("pid").Value.String()
